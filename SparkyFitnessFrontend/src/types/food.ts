@@ -32,7 +32,9 @@ export interface FoodVariant {
   is_default?: boolean;
   is_locked?: boolean;
   glycemic_index?: GlycemicIndex;
-  custom_nutrients?: Record<string, string | number>; // New field for custom nutrients
+  custom_nutrients?: Record<string, string | number>;
+  allergens?: string[] | null;
+  traces?: string[] | null;
 }
 
 export interface Food {
@@ -115,7 +117,9 @@ export interface FoodEntry {
   iron?: number;
   glycemic_index?: GlycemicIndex;
   serving_size?: number;
-  custom_nutrients?: Record<string, string | number>; // New field for custom nutrients
+  custom_nutrients?: Record<string, string | number>;
+  allergens?: string[] | null;
+  traces?: string[] | null;
 }
 
 export interface CSVData {
@@ -189,6 +193,8 @@ export type NumericFoodVariantKeys = Exclude<
   | 'is_locked'
   | 'glycemic_index'
   | 'custom_nutrients'
+  | 'allergens'
+  | 'traces'
 >;
 export interface EquivalentUnit {
   id?: string;

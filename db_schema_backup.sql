@@ -1436,6 +1436,8 @@ CREATE TABLE public.food_entries (
     meal_id uuid,
     food_entry_meal_id uuid,
     custom_nutrients jsonb DEFAULT '{}'::jsonb,
+    allergens text[],
+    traces text[],
     meal_type_id uuid NOT NULL,
     CONSTRAINT chk_food_or_meal_id CHECK ((((food_id IS NOT NULL) AND (meal_id IS NULL)) OR ((food_id IS NULL) AND (meal_id IS NOT NULL))))
 );
@@ -1515,6 +1517,8 @@ CREATE TABLE public.food_variants (
     is_default boolean DEFAULT false,
     glycemic_index text,
     custom_nutrients jsonb DEFAULT '{}'::jsonb,
+    allergens text[],
+    traces text[],
     CONSTRAINT food_variants_glycemic_index_check CHECK ((glycemic_index = ANY (ARRAY['None'::text, 'Very Low'::text, 'Low'::text, 'Medium'::text, 'High'::text, 'Very High'::text])))
 );
 

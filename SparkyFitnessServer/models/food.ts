@@ -104,7 +104,9 @@ async function searchFoods(
           'iron', fv.iron,
           'is_default', fv.is_default,
           'glycemic_index', fv.glycemic_index,
-          'custom_nutrients', fv.custom_nutrients
+          'custom_nutrients', fv.custom_nutrients,
+          'allergens', fv.allergens,
+          'traces', fv.traces
         ) AS default_variant
       FROM foods f
       LEFT JOIN food_variants fv ON f.id = fv.food_id AND fv.is_default = TRUE
@@ -162,8 +164,8 @@ async function createFood(foodData: any) {
         food_id, serving_size, serving_unit, calories, protein, carbs, fat,
         saturated_fat, polyunsaturated_fat, monounsaturated_fat, trans_fat,
         cholesterol, sodium, potassium, dietary_fiber, sugars,
-        vitamin_a, vitamin_c, calcium, iron, is_default, glycemic_index, custom_nutrients, created_at, updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, TRUE, $21, $22, now(), now()) RETURNING id`,
+        vitamin_a, vitamin_c, calcium, iron, is_default, glycemic_index, custom_nutrients, allergens, traces, created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, TRUE, $21, $22, $23, $24, now(), now()) RETURNING id`,
       [
         newFood.id,
         sanitizeNumeric(foodData.serving_size),
@@ -187,6 +189,8 @@ async function createFood(foodData: any) {
         sanitizeNumeric(foodData.iron),
         sanitizeGlycemicIndex(foodData.glycemic_index),
         foodData.custom_nutrients || {},
+        foodData.allergens || null,
+        foodData.traces || null,
       ]
     );
     const newVariantId = variantResult.rows[0].id;
@@ -217,6 +221,8 @@ async function createFood(foodData: any) {
         iron: foodData.iron,
         is_default: true,
         custom_nutrients: foodData.custom_nutrients || {},
+        allergens: foodData.allergens || null,
+        traces: foodData.traces || null,
       },
     };
   } catch (error) {
@@ -257,7 +263,9 @@ async function findFoodByBarcode(barcode: any, userId: any) {
           'iron', fv.iron,
           'is_default', fv.is_default,
           'glycemic_index', fv.glycemic_index,
-          'custom_nutrients', fv.custom_nutrients
+          'custom_nutrients', fv.custom_nutrients,
+          'allergens', fv.allergens,
+          'traces', fv.traces
         ) AS default_variant
       FROM foods f
       LEFT JOIN food_variants fv ON f.id = fv.food_id AND fv.is_default = TRUE
@@ -300,7 +308,9 @@ async function getFoodById(foodId: any, userId: any) {
           'iron', fv.iron,
           'is_default', fv.is_default,
           'glycemic_index', fv.glycemic_index,
-          'custom_nutrients', fv.custom_nutrients
+          'custom_nutrients', fv.custom_nutrients,
+          'allergens', fv.allergens,
+          'traces', fv.traces
         ) AS default_variant
       FROM foods f
       LEFT JOIN food_variants fv ON f.id = fv.food_id AND fv.is_default = TRUE
@@ -437,7 +447,9 @@ async function getFoodsWithPagination(
           'iron', fv.iron,
           'is_default', fv.is_default,
           'glycemic_index', fv.glycemic_index,
-          'custom_nutrients', fv.custom_nutrients
+          'custom_nutrients', fv.custom_nutrients,
+          'allergens', fv.allergens,
+          'traces', fv.traces
         ) AS default_variant
       FROM foods f
       LEFT JOIN food_variants fv ON f.id = fv.food_id AND fv.is_default = TRUE
@@ -846,10 +858,10 @@ async function createFoodsInBulk(userId: any, foodDataArray: any) {
               food_id, serving_size, serving_unit, is_default, calories, protein, carbs, fat,
               saturated_fat, polyunsaturated_fat, monounsaturated_fat, trans_fat,
               cholesterol, sodium, potassium, dietary_fiber, sugars,
-              vitamin_a, vitamin_c, calcium, iron, glycemic_index, custom_nutrients, created_at, updated_at
+              vitamin_a, vitamin_c, calcium, iron, glycemic_index, custom_nutrients, allergens, traces, created_at, updated_at
             ) VALUES (
               $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
-              $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, now(), now()
+              $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, now(), now()
             )`,
           [
             newFoodId,
@@ -875,6 +887,8 @@ async function createFoodsInBulk(userId: any, foodDataArray: any) {
             sanitizeNumeric(variant.iron),
             sanitizeGlycemicIndex(variant.glycemic_index),
             variant.custom_nutrients || {},
+            variant.allergens || null,
+            variant.traces || null,
           ]
         );
         totalVariantsCreated++;
