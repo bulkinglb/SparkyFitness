@@ -413,7 +413,14 @@ export function useCustomFoodForm({
   const updateVariant = (
     index: number,
     field: keyof FormFoodVariant | string,
-    value: string | number | boolean | GlycemicIndex | EquivalentUnit[]
+    value:
+      | string
+      | number
+      | boolean
+      | GlycemicIndex
+      | EquivalentUnit[]
+      | string[]
+      | null
   ) => {
     const updatedVariants = [...variants];
     const updatedOriginalVariants = [...originalVariants];

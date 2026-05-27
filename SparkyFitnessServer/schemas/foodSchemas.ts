@@ -26,6 +26,8 @@ export const FoodVariantSchema = z.object({
   custom_nutrients: z
     .record(z.string(), z.union([z.string(), z.number()]))
     .optional(),
+  allergens: z.array(z.string()).nullable().optional(),
+  traces: z.array(z.string()).nullable().optional(),
 });
 
 export type FoodVariant = z.infer<typeof FoodVariantSchema>;
