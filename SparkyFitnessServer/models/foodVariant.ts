@@ -124,8 +124,8 @@ async function updateFoodVariant(id: any, variantData: any, userId: any) {
         is_default = COALESCE($21, is_default),
         glycemic_index = COALESCE($22, glycemic_index),
         custom_nutrients = COALESCE($23, custom_nutrients),
-        allergens = $25,
-        traces = $26,
+        allergens = COALESCE($25, allergens),
+        traces = COALESCE($26, traces),
         updated_at = now()
       WHERE id = $24
       RETURNING *`,
