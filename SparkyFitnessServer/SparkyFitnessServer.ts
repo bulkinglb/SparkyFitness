@@ -56,7 +56,6 @@ import versionRoutes from './routes/versionRoutes.js';
 import onboardingRoutes from './routes/onboardingRoutes.js';
 import customNutrientRoutes from './routes/customNutrientRoutes.js';
 import allergenPreferenceRoutes from './routes/allergenPreferenceRoutes.js';
-import { backfillOffAllergens } from './utils/backfillAllergens.js';
 import { applyMigrations } from './utils/dbMigrations.js';
 import { applyRlsPolicies } from './utils/applyRlsPolicies.js';
 import waterContainerRoutes from './routes/waterContainerRoutes.js';
@@ -602,9 +601,6 @@ applyMigrations()
     }
     scheduleBackups();
     scheduleSessionCleanup();
-    backfillOffAllergens().catch((err) =>
-      log('warn', 'backfillOffAllergens failed:', err)
-    );
     scheduleWithingsSyncs();
     scheduleGarminSyncs();
     scheduleFitbitSyncs();
